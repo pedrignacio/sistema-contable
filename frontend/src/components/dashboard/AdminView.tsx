@@ -192,3 +192,4 @@ export default function AdminView({ token }: AdminViewProps) {
     </div>
   );
 }
+// End of AdminView component

@@ -13,13 +13,17 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
-    }
-    setIsLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const initAuth = () => {
+      const storedToken = localStorage.getItem('token');
+      const storedUser = localStorage.getItem('user');
+      if (storedToken && storedUser) {
+        setToken(storedToken);
+        setUser(JSON.parse(storedUser));
+      }
+      setIsLoading(false);
+    };
+    initAuth();
   }, []);
 
   const handleLoginSuccess = (newToken: string, newUser: UserProfile) => {
