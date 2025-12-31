@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { api } from '@/lib/api';
 import { Company } from '@/types';
 
@@ -14,18 +14,18 @@ export default function CompanyManagement({ token }: CompanyManagementProps) {
   const [newCompanyRut, setNewCompanyRut] = useState('');
   const [error, setError] = useState('');
 
-  const fetchCompanies = async () => {
+  const fetchCompanies = useCallback(async () => {
     try {
       const data = await api.getCompanies(token);
       setCompanies(data);
     } catch {
       // Silent fail or specific error
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     fetchCompanies();
-  }, [token]);
+  }, [fetchCompanies]);
 
   const handleCreateCompany = async (e: React.FormEvent) => {
     e.preventDefault();
