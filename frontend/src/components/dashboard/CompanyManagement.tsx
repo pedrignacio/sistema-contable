@@ -62,7 +62,7 @@ export default function CompanyManagement({ token }: CompanyManagementProps) {
               placeholder="Nombre de la empresa"
               value={newCompanyName}
               onChange={(e) => setNewCompanyName(e.target.value)}
-              className="flex-1 p-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none text-gray-700"
+              className="flex-1 p-2 border border-gray-300 rounded-lg text-sm placeholder-gray-500 text-gray-900 focus:ring-2 focus:ring-emerald-500 outline-none"
               required
             />
             <input
@@ -70,7 +70,7 @@ export default function CompanyManagement({ token }: CompanyManagementProps) {
               placeholder="RUT (76.123.456-7)"
               value={newCompanyRut}
               onChange={(e) => setNewCompanyRut(e.target.value)}
-              className="w-40 p-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none text-gray-700"
+              className="w-40 p-2 border border-gray-300 rounded-lg text-sm placeholder-gray-500 text-gray-900 focus:ring-2 focus:ring-emerald-500 outline-none"
               required
             />
             <button
