@@ -20,6 +20,7 @@ export default function AdminView({ token }: AdminViewProps) {
   const [newUserLastName, setNewUserLastName] = useState('');
   const [userSuccessMsg, setUserSuccessMsg] = useState('');
   const [error, setError] = useState('');
+  const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -37,6 +38,7 @@ export default function AdminView({ token }: AdminViewProps) {
     e.preventDefault();
     setUserSuccessMsg('');
     setError('');
+    setIsCreating(true);
     
     try {
       await api.createUser(token, {
@@ -57,6 +59,8 @@ export default function AdminView({ token }: AdminViewProps) {
       setUsersList(data);
     } catch {
       setError('Error al crear usuario');
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -134,9 +138,10 @@ export default function AdminView({ token }: AdminViewProps) {
               </select>
               <button
                 type="submit"
-                className="w-full py-2 bg-emerald-600 text-white text-sm font-medium rounded hover:bg-emerald-700"
+                disabled={isCreating}
+                className="w-full py-2 bg-emerald-600 text-white text-sm font-medium rounded hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Crear Usuario
+                {isCreating ? 'Creando...' : 'Crear Usuario'}
               </button>
               {userSuccessMsg && <p className="text-xs text-emerald-600 font-medium text-center">{userSuccessMsg}</p>}
               {error && <p className="text-xs text-red-600 font-medium text-center">{error}</p>}

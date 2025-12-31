@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { UserProfile } from '@/types';
 import LoginForm from '@/components/auth/LoginForm';
 import AdminView from '@/components/dashboard/AdminView';
@@ -10,10 +10,30 @@ import ClientView from '@/components/dashboard/ClientView';
 export default function Home() {
   const [token, setToken] = useState('');
   const [user, setUser] = useState<UserProfile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    const storedUser = localStorage.getItem('user');
+    if (storedToken && storedUser) {
+      setToken(storedToken);
+      setUser(JSON.parse(storedUser));
+    }
+    setIsLoading(false);
+  }, []);
 
   const handleLoginSuccess = (newToken: string, newUser: UserProfile) => {
+    localStorage.setItem('token', newToken);
+    localStorage.setItem('user', JSON.stringify(newUser));
     setToken(newToken);
     setUser(newUser);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setToken('');
+    setUser(null);
   };
 
   const renderDashboardContent = () => {
@@ -30,6 +50,10 @@ export default function Home() {
         return <div>Rol no reconocido</div>;
     }
   };
+
+  if (isLoading) {
+    return <div className="flex min-h-screen items-center justify-center bg-emerald-50 text-emerald-800">Cargando...</div>;
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 md:p-24 bg-emerald-50">
@@ -48,7 +72,7 @@ export default function Home() {
                 <p className="text-xs text-gray-500">{user?.role}</p>
               </div>
               <button 
-                onClick={() => { setToken(''); setUser(null); }}
+                onClick={handleLogout}
                 className="px-4 py-2 text-sm text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
               >
                 Cerrar Sesión

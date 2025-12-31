@@ -13,6 +13,7 @@ export default function CompanyManagement({ token }: CompanyManagementProps) {
   const [newCompanyName, setNewCompanyName] = useState('');
   const [newCompanyRut, setNewCompanyRut] = useState('');
   const [error, setError] = useState('');
+  const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
     const loadCompanies = async () => {
@@ -29,6 +30,7 @@ export default function CompanyManagement({ token }: CompanyManagementProps) {
   const handleCreateCompany = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsCreating(true);
     try {
       await api.createCompany(token, { name: newCompanyName, rut: newCompanyRut });
       setNewCompanyName('');
@@ -39,6 +41,8 @@ export default function CompanyManagement({ token }: CompanyManagementProps) {
       setCompanies(data);
     } catch {
       setError('Error al crear empresa');
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -71,9 +75,14 @@ export default function CompanyManagement({ token }: CompanyManagementProps) {
             />
             <button
               type="submit"
-              className="px-6 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 shadow-sm"
+              disabled={isCreating}
+              className={`px-6 py-2 text-white text-sm font-medium rounded-lg shadow-sm transition-colors ${
+                isCreating 
+                  ? 'bg-emerald-400 cursor-not-allowed' 
+                  : 'bg-emerald-600 hover:bg-emerald-700'
+              }`}
             >
-              + Crear
+              {isCreating ? 'Creando...' : '+ Crear'}
             </button>
           </form>
           {error && <p className="text-xs text-red-600 font-medium mt-2">{error}</p>}

@@ -7,6 +7,10 @@ interface ContadorViewProps {
 }
 
 export default function ContadorView({ token }: ContadorViewProps) {
+  const handleFeatureNotAvailable = () => {
+    alert('Esta funcionalidad estará disponible en el próximo módulo.');
+  };
+
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
@@ -14,10 +18,16 @@ export default function ContadorView({ token }: ContadorViewProps) {
           <h3 className="font-bold text-emerald-800 mb-2">Gestión de Empresas</h3>
           <p className="text-sm text-gray-600 mb-4">Administra las empresas asignadas y sus movimientos.</p>
           <div className="space-y-2">
-            <button className="w-full text-left px-3 py-2 text-sm bg-emerald-50 text-emerald-700 rounded hover:bg-emerald-100">
+            <button 
+              onClick={handleFeatureNotAvailable}
+              className="w-full text-left px-3 py-2 text-sm bg-emerald-50 text-emerald-700 rounded hover:bg-emerald-100 transition-colors"
+            >
               + Nueva Declaración
             </button>
-            <button className="w-full text-left px-3 py-2 text-sm bg-emerald-50 text-emerald-700 rounded hover:bg-emerald-100">
+            <button 
+              onClick={handleFeatureNotAvailable}
+              className="w-full text-left px-3 py-2 text-sm bg-emerald-50 text-emerald-700 rounded hover:bg-emerald-100 transition-colors"
+            >
               Importar Cartola Bancaria
             </button>
           </div>
