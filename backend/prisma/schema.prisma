@@ -1,0 +1,73 @@
+// Sistema Contable - Module 1: Base System
+// Core models: User, Company, UserCompany
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+
+// ---------------------------------------------------------
+// USER MANAGEMENT
+// ---------------------------------------------------------
+
+enum Role {
+  CONTADOR
+  ADMIN
+  CLIENTE
+}
+
+// User: Represents a person accessing the system
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  firstName String?
+  lastName  String?
+  role      Role     @default(CONTADOR)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  companies UserCompany[]
+
+  @@map("users")
+}
+
+// Company: Represents a business entity managed in the system
+model Company {
+  id        String   @id @default(uuid())
+  name      String
+  rut       String   @unique // Tax Identifier
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  users     UserCompany[]
+
+  @@map("companies")
+}
+
+// UserCompany: Link between Users and Companies with a specific role
+model UserCompany {
+  id        String   @id @default(uuid())
+  userId    String
+  companyId String
+  role      String   // e.g., 'admin', 'accountant', 'viewer'
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id])
+  company   Company  @relation(fields: [companyId], references: [id])
+
+  @@unique([userId, companyId])
+  @@map("user_companies")
+}
