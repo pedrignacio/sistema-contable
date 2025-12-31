@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { UserProfile } from '@/types';
 import CompanyManagement from './CompanyManagement';
@@ -21,18 +21,17 @@ export default function AdminView({ token }: AdminViewProps) {
   const [userSuccessMsg, setUserSuccessMsg] = useState('');
   const [error, setError] = useState('');
 
-  const fetchUsers = useCallback(async () => {
-    try {
-      const data = await api.getUsers(token);
-      setUsersList(data);
-    } catch {
-      console.error('Failed to fetch users');
-    }
-  }, [token]);
-
   useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
+    const loadUsers = async () => {
+      try {
+        const data = await api.getUsers(token);
+        setUsersList(data);
+      } catch {
+        console.error('Failed to fetch users');
+      }
+    };
+    loadUsers();
+  }, [token]);
 
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,7 +51,10 @@ export default function AdminView({ token }: AdminViewProps) {
       setNewUserPassword('');
       setNewUserFirstName('');
       setNewUserLastName('');
-      fetchUsers();
+      
+      // Refresh users list
+      const data = await api.getUsers(token);
+      setUsersList(data);
     } catch {
       setError('Error al crear usuario');
     }
